@@ -1,5 +1,7 @@
 # SeReDe - Secure *Remote-'N'-Authenticated* DevTools
 
+**Collaborate on Bugs Using Chrome DevTools remotely over a Secure Proxy from Any Browser**
+
 Nothing fancy folks, just a simple 
 HTTPS+WebSocket Proxy Server with HTTP Basic Auth to 
 expose DevTools from a browser on the machine you run it on
@@ -139,3 +141,4 @@ Because of this ad-hoc, "off-branch" solution, and given the fact that each vers
 ### Other disclaimers
 
 This project has zero association, endorsement or any relationship with with Google, Chrome, the Chrome Dev team, Chrome DevTools front-end or any of the authors.
+
