@@ -1,3 +1,4 @@
+import os from 'os';
 import fs from 'fs';
 import path from 'path';
 import http from 'http';
@@ -8,7 +9,6 @@ import {fileURLToPath} from 'url';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import WebSocket from 'ws';
-//import {WebSocketServer} from 'ws';
 import compression from 'compression';
 
 const DEBUG = {
@@ -17,8 +17,10 @@ const DEBUG = {
 console.log('\n');
 
 if ( ! process.argv[2] || !process.argv[2].includes(':') ) {
-  throw new TypeError(`Must supply: <CHROME_PORT>:<SERVER_PORT> 
+  throw new TypeError(`Must supply: <CHROME_PORT>:<DOMAIN_NAME>:<SERVER_PORT> 
     Received only: ${process.argv[2]}
+    E.g:
+    $ srad 9222:example.com:8000
   `);
 }
 const {version} = JSON.parse(fs.readFileSync(path.resolve(
@@ -27,14 +29,17 @@ const {version} = JSON.parse(fs.readFileSync(path.resolve(
     'package.json'
   )).toString());
 const COOKIENAME = `srad@${version}`;
-const [CHROME_PORT, SERVER_PORT] = process.argv[2].split(':').map(x => parseInt(x));
+const [CHROME_PORT, DOMAIN, SERVER_PORT] = process.argv[2].split(':').map((x,i) => {
+  if ( i % 2 == 0 ) return parseInt(x);
+  return x;
+});
 const cookieBuf = Buffer.alloc(20);
 const tokenBuf = Buffer.alloc(20);
 const COOKIE = randomFillSync(cookieBuf).toString('hex');
 const TOKEN = randomFillSync(tokenBuf).toString('hex');
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 
-DEBUG.val && console.log({version, COOKIENAME, CHROME_PORT, SERVER_PORT, COOKIE, TOKEN});
+DEBUG.val && console.log({version, COOKIENAME, CHROME_PORT, SERVER_PORT, DOMAIN, COOKIE, TOKEN});
 
 const NO_AUTH = false; // true is insecure as anyone can connect
 const COOKIE_OPTS = {
@@ -64,21 +69,16 @@ app.get('/login', (req, res) => {
   // if we are bearing a valid token set the cookie
   // so future requests will be authorized
   if ( token == TOKEN ) {
-    res.cookie(COOKIENAME+PORT, COOKIE, COOKIE_OPTS);
+    res.cookie(COOKIENAME+SERVER_PORT, COOKIE, COOKIE_OPTS);
     authorized = true;
   } else {
-    const cookie = req.cookies[COOKIENAME+PORT];
+    const cookie = req.cookies[COOKIENAME+SERVER_PORT];
     authorized = cookie === COOKIE || NO_AUTH;
   }
   if ( authorized ) {
     res.redirect('/');
   } else {
-    res.end(`
-      <!DOCTYPE html>
-      <style>:root { font-family: sans-serif; }</style>
-      <h1>Logging you into devtools...</h1>
-      <script src=devtools_login.js></script>
-    `);
+    res.sendStatus(401);
   }
 });
 app.post('/', (req, res) => {
@@ -87,10 +87,10 @@ app.post('/', (req, res) => {
   // if we are bearing a valid token set the cookie
   // so future requests will be authorized
   if ( token == TOKEN ) {
-    res.cookie(COOKIENAME+PORT, COOKIE, COOKIE_OPTS);
+    res.cookie(COOKIENAME+SERVER_PORT, COOKIE, COOKIE_OPTS);
     authorized = true;
   } else {
-    const cookie = req.cookies[COOKIENAME+PORT];
+    const cookie = req.cookies[COOKIENAME+SERVER_PORT];
     authorized = cookie === COOKIE || NO_AUTH;
   }
   if ( authorized ) {
@@ -100,34 +100,25 @@ app.post('/', (req, res) => {
   }
 });
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve('public', 'index.html'));
+  res.sendFile(path.resolve('src', 'public', 'index.html'));
 });
 app.get('/devtools/LICENSE.txt', (req, res) => {
-  res.sendFile(path.resolve('public', 'devtools', 'LICENSE.txt'));
+  res.sendFile(path.resolve('src', 'public', 'devtools', 'LICENSE.txt'));
 });
 app.get('/devtools_login.js', (req, res) => {
-  res.sendFile(path.resolve('public', 'devtools_login.js'));
+  res.sendFile(path.resolve('src', 'public', 'devtools_login.js'));
 });
-/**
-// comment this out to ensure our proxy (below) uses the latest version
-app.get('/devtools/inspector.html', (req, res) => {
-  res.sendFile(path.resolve('public', 'devtools', 'inspector.html'));
-});
-app.get('/devtools/inspector.js', (req, res) => {
-  res.sendFile(path.resolve('public', 'devtools', 'inspector.js'));
-});
-**/
 app.get('/favicon.ico', (req, res) => {
-  res.sendFile(path.resolve('public', 'favicon.ico'));
+  res.sendFile(path.resolve('src', 'public', 'favicon.ico'));
 });
 app.get('/favicon.svg', (req, res) => {
-  res.sendFile(path.resolve('public', 'favicon.svg'));
+  res.sendFile(path.resolve('src', 'public', 'favicon.svg'));
 });
 app.get('/favicons/favicon.ico', (req, res) => {
-  res.sendFile(path.resolve('public', 'favicons', 'favicon.ico'));
+  res.sendFile(path.resolve('src', 'public', 'favicons', 'favicon.ico'));
 });
 app.get('*', (req, res) => {
-  const cookie = req.cookies[COOKIENAME+PORT];
+  const cookie = req.cookies[COOKIENAME+SERVER_PORT];
   const authorized = cookie === COOKIE || NO_AUTH;
 
   if (authorized) {
@@ -143,7 +134,7 @@ app.get('*', (req, res) => {
     const ExternalEndpoint = `wss=${req.headers['host'].split(':')[0]}`;
 
     // CRDP checks that host is localhost
-    req.headers['host'] = `${'localhost'}:${PORT}`;
+    req.headers['host'] = `${'localhost'}:${SERVER_PORT}`;
 
     const destination = http.request(resource, destinationResponse => {
       const ct = destinationResponse.headers['content-type'];
@@ -224,7 +215,7 @@ const wss = new WebSocket.Server({server});
 
 wss.on('connection', (ws, req) => {
   const cookie = req.headers.cookie;
-  const authorized = (cookie && cookie.includes(`${COOKIENAME+PORT}=${COOKIE}`)) || NO_AUTH;
+  const authorized = (cookie && cookie.includes(`${COOKIENAME+SERVER_PORT}=${COOKIE}`)) || NO_AUTH;
   DEBUG.val && console.log('connect', {cookie, authorized}, req.path, req.url);
   if ( authorized ) {
     // the internal websocket to the browser (not public, remember never expose CHROME_PORT to
@@ -261,7 +252,7 @@ wss.on('connection', (ws, req) => {
   }
 });
 
-server.listen(PORT, err => {
+server.listen(SERVER_PORT, err => {
   if ( err ) {
     throw err;
   }
@@ -270,7 +261,7 @@ server.listen(PORT, err => {
       at: new Date, 
       CHROME_PORT, 
       SERVER_PORT, 
-      loginUrl:  
+      loginUrl: `https://${DOMAIN}:${SERVER_PORT}/login?token=${TOKEN}`
     }
   });
 });
