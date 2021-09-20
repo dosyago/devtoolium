@@ -23,5 +23,11 @@
   "bugs": {
     "url": "https://github.com/i5ik/secure-remote-devtools/issues"
   },
-  "homepage": "https://github.com/i5ik/secure-remote-devtools#readme"
+  "homepage": "https://github.com/i5ik/secure-remote-devtools#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cookie-parser": "latest",
+    "express": "latest",
+    "ws": "^7.5.4"
+  }
 }
