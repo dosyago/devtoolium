@@ -37,7 +37,7 @@ const COOKIE_OPTS = {
   sameSite: 'Strict'
 };
 const constructibleStyleSheetsPolyfill = syncfetch('https://unpkg.com/construct-style-sheets-polyfill@3.0.0/dist/adoptedStyleSheets.js').text();
-const CLI = fs.readlpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
+const CLI = fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
 
 if ( CLI ) {
   if ( ! process.argv[2] || !process.argv[2].includes(':') ) {
