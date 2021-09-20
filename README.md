@@ -69,7 +69,9 @@ For security, ***don't expose your browser port (by default 9222) to the public 
 
 This server uses [helmet](https://github.com/helmetjs/helmet), HTTPS, and WSS (*secure WebSockets*).
 
-**srad** uses HTTP Basic Auth and cookie authentication to prevent unauthorized connections. The need for a secure remote connection utility for DevTools is [well known](https://bugs.chromium.org/p/chromium/issues/detail?id=813540)
+Once you start `srad` (either via the command line or from the library) you will receive a login URL. That URL can be used to log you on to the secure DevTools server. Without it you will not be able to access any DevTools endpoints. Pass it out to those frens you wish to collaborate with on the solvage, ever venerable, of the buggs.
+
+**srad** uses cookie authentication to prevent unauthorized connections. The need for a secure remote connection utility for DevTools is [well known](https://bugs.chromium.org/p/chromium/issues/detail?id=813540)
 
 ## Certificates
 
