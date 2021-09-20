@@ -2,6 +2,10 @@
 
 **Collaborate on Bugs Using Chrome DevTools remotely over a Secure Proxy from Any Browser**
 
+*Alpha release*
+
+## What is this?
+
 Nothing fancy folks, just a simple 
 HTTPS+WebSocket Proxy Server with HTTP Basic Auth to 
 expose DevTools from a browser on the machine you run it on
@@ -9,13 +13,15 @@ so you can work and collaborate, on web apps and bugs, remotely.
 Perfect for debugging remotely in collaboration with other humes.
 Connect to and debug remote tabs from any device\*.
 
+\* This patched version of Chrome DevTools works in latest Firefox, Safari and Chrome on dekstop and mobile (as tested). Mobile (especially iOS) has bugs.
+
+## Background 
+
 A version of this tool was originally part of the closed-source paid version of my [secure remote browser](https://github.com/i5ik/ViewFinder), but the secure remote debugging capability proved so useful I decided to package it up, copy it out, and make it its own bona-fide open-source product for everyone to use, for free.
 
 I searched around a bit before doing so, and while I couldn't find any current prior art that was up to date in 2021, here was some prior art that I found:
 
 - [auchenberg/devtools-remote](https://github.com/auchenberg/devtools-remote) - An experimental HTTP and WebSocket proxy for DevTools from 2016
-
-\* This patched version of Chrome DevTools works in latest Firefox, Safari and Chrome on dekstop and mobile (as tested).
 
 ## Get it
 
