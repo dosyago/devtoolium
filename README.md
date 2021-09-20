@@ -7,9 +7,10 @@
 ## What is this?
 
 Nothing fancy folks, just a simple 
-HTTPS+WebSocket Proxy Server with HTTP Basic Auth to 
+HTTPS+WebSocket Proxy Server with Auth to 
 expose DevTools from a browser on the machine you run it on
 so you can work and collaborate, on web apps and bugs, remotely.
+
 Perfect for debugging remotely in collaboration with other humes.
 Connect to and debug remote tabs from any device\*.
 
