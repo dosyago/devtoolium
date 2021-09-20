@@ -3,6 +3,9 @@
   "version": "1.0.8",
   "description": "Secure Remote and Authenticate DevTools, connect to remote tabs and debug.",
   "main": "src/index.js",
+  "bin": {
+    "srad": "src/index.js"
+  },
   "scripts": {
     "test": "node src/index.js"
   },
@@ -28,6 +31,7 @@
     "compression": "^1.7.4",
     "cookie-parser": "latest",
     "express": "^4.17.1",
+    "sync-fetch": "^0.3.0",
     "ws": "^7.5.4"
   }
 }

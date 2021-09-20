@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import os from 'os';
 import fs from 'fs';
 import path from 'path';
@@ -10,6 +11,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import WebSocket from 'ws';
 import compression from 'compression';
+import syncfetch from 'sync-fetch';
 
 const DEBUG = {
   val: 0
@@ -34,6 +36,7 @@ const COOKIE_OPTS = {
   maxAge: 345600000,
   sameSite: 'Strict'
 };
+const constructibleStyleSheetsPolyfill = syncfetch('https://unpkg.com/construct-style-sheets-polyfill@3.0.0/dist/adoptedStyleSheets.js').text();
 const CLI = process.argv[1] === fileURLToPath(import.meta.url);
 
 if ( CLI ) {
@@ -137,6 +140,9 @@ export default async function start({browserPort, serverPort, certificatesPath, 
   app.get('/devtools/LICENSE.txt', (req, res) => {
     res.sendFile(path.resolve('src', 'public', 'devtools', 'LICENSE.txt'));
   });
+  app.get('/devtools/error_catchers.js', (req, res) => {
+    res.sendFile(path.resolve('src', 'public', 'error_catchers.js'));
+  });
   app.get('/devtools_login.js', (req, res) => {
     res.sendFile(path.resolve('src', 'public', 'devtools_login.js'));
   });
@@ -170,7 +176,35 @@ export default async function start({browserPort, serverPort, certificatesPath, 
 
       const destination = http.request(resource, destinationResponse => {
         const ct = destinationResponse.headers['content-type'];
-        if ( ct.includes('json') ) {
+        if ( ct.includes('html') ) {
+          const onData = data => Data.body += data.toString();
+          const Data = {body: ''};
+          destinationResponse.on('data', onData);
+
+          destinationResponse.headers['cache-control'] = 'no-cache';
+
+          destinationResponse.on('end', () => {
+            //destinationResponse.removeListener('data', onData);
+            // save responses to inspect
+              /**
+              fs.writeFileSync(
+                path.resolve('save', `file${Math.random().toString(36)}.data`),
+                body
+              );
+              **/
+
+            let newVal = Data.body;
+            newVal = `
+              <script src="//unpkg.com/@ungap/custom-elements"></script>
+              <script src=error_catchers.js></script>
+            ` + newVal;
+            destinationResponse.headers['content-length'] = newVal.length+'';
+            DEBUG.val && console.log(destinationResponse.headers, req.url, Data.body.length);
+            res.writeHead(destinationResponse.statusCode, destinationResponse.headers);
+            res.write(newVal);
+            res.end();
+          });
+        } else if ( ct.includes('json') ) {
           const onData = data => Data.body += data.toString();
           const Data = {body: ''};
           destinationResponse.on('data', onData);
@@ -215,19 +249,26 @@ export default async function start({browserPort, serverPort, certificatesPath, 
               );
               **/
 
-            if ( Data.body.includes('chrome://new') ) {
-              let newVal = Data.body.replace(/chrome:\/\/newtab/g, 'data:text,about:blank');
+            let newVal = Data.body;
+
+            if ( newVal.includes('chrome://new') ) {
+              newVal = newVal.replace(/chrome:\/\/newtab/g, 'data:text,about:blank');
               newVal = newVal.replace(/chrome:\/\/new-tab-page/g, 'data:text,about:blank');
               // update content length
               destinationResponse.headers['content-length'] = newVal.length+'';
-              DEBUG.val && console.log(destinationResponse.headers, req.url, Data.body.length);
-              res.writeHead(destinationResponse.statusCode, destinationResponse.headers);
-              res.write(newVal);
-              res.end();
-            } else {
-              res.writeHead(destinationResponse.statusCode, destinationResponse.headers);
-              res.end(Data.body);
             }
+            
+            if ( newVal.includes('CSSStyleSheet') ) {
+              newVal = constructibleStyleSheetsPolyfill + '\n' + newVal;
+              // update content length
+              destinationResponse.headers['content-length'] = newVal.length+'';
+            } 
+
+            DEBUG.val && console.log(destinationResponse.headers, req.url, Data.body.length, newVal.length);
+
+            res.writeHead(destinationResponse.statusCode, destinationResponse.headers);
+            res.write(newVal);
+            res.end();
           });
         } else {
           destinationResponse.headers['cache-control'] = 'max-age=86400';
@@ -242,8 +283,10 @@ export default async function start({browserPort, serverPort, certificatesPath, 
     }
   });
 
+  let resolve;
   const server = https.createServer(SSL_OPTS, app);
   const wss = new WebSocket.Server({server});
+  const pr = new Promise(res => resolve = res);
 
   wss.on('connection', (ws, req) => {
     const cookie = req.headers.cookie;
@@ -288,13 +331,17 @@ export default async function start({browserPort, serverPort, certificatesPath, 
     if ( err ) {
       throw err;
     }
+    const UP_OBJECT = {
+      at: new Date, 
+      CHROME_PORT, 
+      SERVER_PORT, 
+      loginUrl: `https://${DOMAIN}:${SERVER_PORT}/login?token=${TOKEN}`
+    }
     console.log({
-      serverUp: { 
-        at: new Date, 
-        CHROME_PORT, 
-        SERVER_PORT, 
-        loginUrl: `https://${DOMAIN}:${SERVER_PORT}/login?token=${TOKEN}`
-      }
+      sradUp: UP_OBJECT
     });
+    resolve(UP_OBJECT);
   });
+
+  return pr;
 }
