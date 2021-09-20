@@ -1,6 +1,6 @@
 {
   "name": "srad",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Secure Remote and Authenticate DevTools, connect to remote tabs and debug.",
   "main": "src/index.js",
   "bin": {
