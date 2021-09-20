@@ -1,0 +1,27 @@
+{
+  "name": "srad",
+  "version": "1.0.2",
+  "description": "Secure Remote and Authenticate DevTools, connect to remote tabs and debug.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i5ik/secure-remote-devtools.git"
+  },
+  "keywords": [
+    "devtools",
+    "remote-devtools",
+    "secure",
+    "authentication",
+    "debugging",
+    "collaboration"
+  ],
+  "author": "@dosy",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/i5ik/secure-remote-devtools/issues"
+  },
+  "homepage": "https://github.com/i5ik/secure-remote-devtools#readme"
+}
