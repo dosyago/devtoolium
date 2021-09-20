@@ -75,6 +75,8 @@ This server uses [helmet](https://github.com/helmetjs/helmet), HTTPS, and WSS (*
 
 By default, srad looks for TLS certificates *(`cert.pem, chain.pem, fullchain.pem  and privkey.pem`)* in `path.resolve(os.homedir(), 'sslcerts')` *(`$HOME/sslcerts` on Windows)*. You can override that with the `certBasePath` option. 
 
+`srad` will ***always*** throw an error and fail is certificates are not found.
+
 ## API 
 
 All the options you see below can be accessed via script using their camel-cased variants. Globally installed command line usage (`npm i -g srad@latest`) is shown for demonstrative purposes. The command line API is equivalent whether you use `npx` or `npm start` from the repository to run it.
@@ -83,9 +85,11 @@ All the options you see below can be accessed via script using their camel-cased
 
 The command line has a very simple format:
 
-> srad: <BROWSER_PORT>:<DOMAIN_NAME|IP_ADDRESS>:<SERVER_PORT>
+> srad <BROWSER_PORT>:<DOMAIN_NAME|IP_ADDRESS>:<SERVER_PORT> [certificatesPath]
 
 Where `DOMAIN_NAME|IP_ADDRESS` is that of the server you run `srad` on.
+
+And `certificatesPath` is an optional file system path to override the default location to look for [certificates](#Certificates).
 
 ### Browser Port
 
