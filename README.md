@@ -1,4 +1,4 @@
-# SeReNADe - Secure *Remote-'N'-Authenticated* DevTools
+# SERENADE - SEcure *REmote-'N'-Authenticated* DEvTools
 
 **Collaborate on Bugs Using Chrome DevTools remotely over a Secure Proxy from Any Browser**
 
@@ -36,13 +36,13 @@ $ npm i
 From the command line:
 
 ```sh
-srad 9222
+srad 9222:mysite.com:8888
 ```
 
 Using npx:
 
 ```sh
-npx srad 9222
+npx srad 9222:me.example.com:8080
 ```
 
 From a NodeJS script:
@@ -50,19 +50,17 @@ From a NodeJS script:
 ```javascript
 import srad from 'srad';
 
-async function remoteDebug(browserPort = 9222){
-  return await srad.connectBrowser(browserPort).then(startServer => startServer({
-    user: 'debugging-hobgoblin',
-    pass: process.env.PASSWORD
-  }));
-}
+srad({
+  browserPort: 9222,
+  serverPort: 8888
+}).then(serverStatus => console.log(`Login URL: ${serverStatus.loginUrl}`));
 ```
 
 From the repository:
 
 ```sh
 $ cd secure-remote-devtools/
-$ npm start 9222
+$ npm start 9222:mysrad.int:8555
 ```
 
 ## Security
@@ -81,56 +79,52 @@ By default, srad looks for TLS certificates *(`cert.pem, chain.pem, fullchain.pe
 
 All the options you see below can be accessed via script using their camel-cased variants. Globally installed command line usage (`npm i -g srad@latest`) is shown for demonstrative purposes. The command line API is equivalent whether you use `npx` or `npm start` from the repository to run it.
 
+### Basic Use
+
+The command line has a very simple format:
+
+> srad: <BROWSER_PORT>:<DOMAIN_NAME|IP_ADDRESS>:<SERVER_PORT>
+
+Where `DOMAIN_NAME|IP_ADDRESS` is that of the server you run `srad` on.
+
 ### Browser Port
 
-The port that you have exposed the remote debugging protocol on, via the `--remote-debugging-port` Chrome command line argument. Simple the first positional argument after the command. I.e, say your browser is on port 51386, you'd start a server that is running remote DevTools with:
+The port that you have exposed the remote debugging protocol on, via the `--remote-debugging-port` Chrome command line argument. Simple the first positional argument after the command. I.e, say your browser is on port 51386, you'd start a server that is running remote DevTools with. For exmaple, to get up and running with chrome headless, make sure you have chrome installed, then try the following:
 
 ```sh
-$ srad 51386
 
-{serverUp: {port: 443, time: 'https://github.com/helmetjs/helmet', connected: true, browserPort: 51386}}
+$ google-chrome-stable --headless --remote-debugging-port=51386 srad 51386:mysite.example.com:8080
+
+{
+  sradUp: {
+    at: 2021-09-20T12:39:24.942Z,
+    CHROME_PORT: 51386,
+    SERVER_PORT: 8080,
+    loginUrl: 'https://mysite.example.com:8080/login?token=a24a30ea17c71f6500b963b732cb2b69fb8d853f'
+  }
+}
+
 ```
 
-### User and Password for Basic Auth
-
-By default srad looks in `path.resolve(os.homedir(), '.srad.access')` for the username and password credentials. The file has the following format.
-
-`~/.srad.access`:
-```txt
-userNaMe:passW0rD
-```
-
-You can also pass it via environment variable `SEREDE_AUTH`, e.g.:
-
-```sh
-$ export SEREDE_AUTH=user:pass
-```
-
-Note that the values are only read on server start, and any changes you make to the environment variable or `.srad.access` file will not be reflected until you restart the server.
+There's no default, you must always specify a browser port. If the browser is not running on that port, `srad` will thrown an error. 
 
 ### Background
 
 Run it in the background, like so:
 
 ```sh
-$ srad 51386 &
+$ srad 51386:doppelgange.pointbyne.org:8888 &
 ```
 
 Or using pm2:
 
 ```sh
-$ pm2 start srad
+$ pm2 start srad 9222:example.spacedemons.com:8433
 ```
 
 ## Server Port
 
-By default srad runs on port 8000, but you can set this via the `SEREDE_PORT` environment variable, or via the following syntax:
-
-```sh
-$ srad 8002:51386
-```
-
-Where the argument follows the `<server_port>:<browser_port>` format.
+There's no default port, so you must always specify a server port.
 
 ### Technical Details and Limitations
 
