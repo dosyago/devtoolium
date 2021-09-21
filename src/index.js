@@ -23,7 +23,11 @@ const {version} = JSON.parse(fs.readFileSync(path.resolve(
     '..', 
     'package.json'
   )).toString());
-const COOKIENAME = `srad@${version}`;
+const base = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)), 
+  '..'
+);
+const COOKIENAME = `serenade.devtools@${version}`;
 const cookieBuf = Buffer.alloc(20);
 const tokenBuf = Buffer.alloc(20);
 const COOKIE = randomFillSync(cookieBuf).toString('hex');
@@ -44,7 +48,7 @@ if ( CLI ) {
     throw new TypeError(`Must supply: <CHROME_PORT>:<DOMAIN_NAME>:<SERVER_PORT> 
       Received only: ${process.argv[2]}
       E.g:
-      $ srad 9222:example.com:8000
+      $ serenade 9222:example.com:8000
     `);
   }
 
@@ -66,7 +70,7 @@ if ( CLI ) {
   });
 } else {
   // do nothing
-  DEBUG.val && console.log(`srad has loaded and is ready to go.`);
+  DEBUG.val && console.log(`serenade has loaded and is ready to go.`);
 }
 
 export default async function start({browserPort, serverPort, certificatesPath, domainOrIP}) {
@@ -135,25 +139,25 @@ export default async function start({browserPort, serverPort, certificatesPath, 
     }
   });
   app.get('/', (req, res) => {
-    res.sendFile(path.resolve('src', 'public', 'index.html'));
+    res.sendFile(path.resolve(base, 'src', 'public', 'index.html'));
   });
   app.get('/devtools/LICENSE.txt', (req, res) => {
-    res.sendFile(path.resolve('src', 'public', 'devtools', 'LICENSE.txt'));
+    res.sendFile(path.resolve(base, 'src', 'public', 'devtools', 'LICENSE.txt'));
   });
   app.get('/devtools/error_catchers.js', (req, res) => {
-    res.sendFile(path.resolve('src', 'public', 'error_catchers.js'));
+    res.sendFile(path.resolve(base, 'src', 'public', 'error_catchers.js'));
   });
   app.get('/devtools_login.js', (req, res) => {
-    res.sendFile(path.resolve('src', 'public', 'devtools_login.js'));
+    res.sendFile(path.resolve(base, 'src', 'public', 'devtools_login.js'));
   });
   app.get('/favicon.ico', (req, res) => {
-    res.sendFile(path.resolve('src', 'public', 'favicon.ico'));
+    res.sendFile(path.resolve(base, 'src', 'public', 'favicon.ico'));
   });
   app.get('/favicon.svg', (req, res) => {
-    res.sendFile(path.resolve('src', 'public', 'favicon.svg'));
+    res.sendFile(path.resolve(base, 'src', 'public', 'favicon.svg'));
   });
   app.get('/favicons/favicon.ico', (req, res) => {
-    res.sendFile(path.resolve('src', 'public', 'favicons', 'favicon.ico'));
+    res.sendFile(path.resolve(base, 'src', 'public', 'favicons', 'favicon.ico'));
   });
   app.get('*', (req, res) => {
     const cookie = req.cookies[COOKIENAME+SERVER_PORT];
@@ -338,7 +342,7 @@ export default async function start({browserPort, serverPort, certificatesPath, 
       loginUrl: `https://${DOMAIN}:${SERVER_PORT}/login?token=${TOKEN}`
     }
     console.log({
-      sradUp: UP_OBJECT
+      serenadeUp: UP_OBJECT
     });
     resolve(UP_OBJECT);
   });
