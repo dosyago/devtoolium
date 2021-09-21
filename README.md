@@ -29,10 +29,10 @@ $ npm i -g serenade.devtools
 ## or
 $ npx serenade.devtools
 ## or
-$ npm i --save serenade
+$ npm i --save serenade.devtools
 ## or
-$ git clone https://github.com/i5ik/secure-remote-devtools.git
-$ cd secure-remote-devtools/
+$ git clone https://github.com/i5ik/serenade.git
+$ cd serenade/ 
 $ npm i
 ```
 
@@ -47,13 +47,13 @@ serenade 9222:mysite.com:8888
 Using npx:
 
 ```sh
-npx serenade 9222:me.example.com:8080
+npx serenade.devtools 9222:me.example.com:8080
 ```
 
 From a NodeJS script:
 
 ```javascript
-import serenade from 'serenade';
+import serenade from 'serenade.devtools';
 
 serenade({
   browserPort: 9222,
@@ -64,9 +64,14 @@ serenade({
 From the repository:
 
 ```sh
-$ cd secure-remote-devtools/
+$ cd serenade/
 $ npm start 9222:myserenade.int:8555
 ```
+
+
+## BTW - *Where does the name serenade come from?*
+
+It comes from **se**cure **re**mote '**n**' **a**uthenticated **de**vtools.
 
 ## Security
 
