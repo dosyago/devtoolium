@@ -1,4 +1,4 @@
-# SERENADE - SEcure *REmote-'N'-Authenticated* DEvTools
+# Serenade - Secure Remote and Authenticated DevTools
 
 **Collaborate on Bugs Using Chrome DevTools remotely over a Secure Proxy from Any Browser**
 
@@ -27,9 +27,9 @@ I searched around a bit before doing so, and while I couldn't find any current p
 ## Get it
 
 ```sh
-$ npm i -g srad
+$ npm i -g serenade.devtools
 ## or
-$ npx srad
+$ npx serenade.devtools
 ## or
 $ npm i --save srad
 ## or
