@@ -23,7 +23,7 @@ Now, all the DevTools endpoints will be available to anyone with `loginUrl`, ena
 ## What is this?
 
 Nothing fancy folks, just a simple 
-HTTPS+WebSocket Proxy Server with Auth to 
+HTTPS Proxy and WebSocket Proxy Server with authentication to 
 help you securely expose DevTools (inlcuding all the endpoints like `/json` and all the `ws://` endpoints for all the targets, and even the **devtools-frontend**: the inspector you see when you open hit Ctrl+Shift+I in your browser). 
 
 This lets you connect to browsers remotely to run automation workloads, or collaborate on bugs, securely, without needing to worry about how `--remote-debugging-port` creates an insecure HTTP server, and unencrypted websockets. Now, everything is encrypted.
@@ -31,7 +31,7 @@ This lets you connect to browsers remotely to run automation workloads, or colla
 Perfect for debugging remotely in collaboration with other humes.
 Connect to and debug remote tabs from any where, and *even run DevTools inspector from any device*\*.
 
-\* This patched version of Chrome DevTools works in latest Firefox, Safari and Chrome on dekstop and mobile (as tested). Mobile (especially iOS) has bugs.
+\* *It also modifies DevTools inspector files in-flight to try to make them work cross-browser. Right now Firefox and Chrome work completely, while iOS browsers (and Safari) have some issues, but they still load the DevTools inspector front-end just a couple things don't work properly.*
 
 ## Background 
 
