@@ -1,6 +1,6 @@
 {
   "name": "serenade.devtools",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Secure Remote and Authenticated DevTools, connect to remote tabs and debug.",
   "type": "module",
   "main": "src/index.js",
