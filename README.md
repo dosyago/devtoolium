@@ -11,9 +11,9 @@ $ serenade 9222:mysite.com:8080
 {
   serenadeUp: {
     at: 2021-09-20T12:39:24.942Z,
-    CHROME_PORT: 51386,
+    CHROME_PORT: 9222,
     SERVER_PORT: 8080,
-    loginUrl: 'https://mysite.example.com:8080/login?token=a24a30ea17c71f6500b963b732cb2b69fb8d853f'
+    loginUrl: 'https://mysite.com:8080/login?token=a24a30ea17c71f6500b963b732cb2b69fb8d853f'
   }
 }
 ```
