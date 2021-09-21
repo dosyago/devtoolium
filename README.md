@@ -31,7 +31,7 @@ $ npm i -g serenade.devtools
 ## or
 $ npx serenade.devtools
 ## or
-$ npm i --save srad
+$ npm i --save serenade
 ## or
 $ git clone https://github.com/i5ik/secure-remote-devtools.git
 $ cd secure-remote-devtools/
@@ -43,21 +43,21 @@ $ npm i
 From the command line:
 
 ```sh
-srad 9222:mysite.com:8888
+serenade 9222:mysite.com:8888
 ```
 
 Using npx:
 
 ```sh
-npx srad 9222:me.example.com:8080
+npx serenade 9222:me.example.com:8080
 ```
 
 From a NodeJS script:
 
 ```javascript
-import srad from 'srad';
+import serenade from 'serenade';
 
-srad({
+serenade({
   browserPort: 9222,
   serverPort: 8888
 }).then(serverStatus => console.log(`Login URL: ${serverStatus.loginUrl}`));
@@ -67,7 +67,7 @@ From the repository:
 
 ```sh
 $ cd secure-remote-devtools/
-$ npm start 9222:mysrad.int:8555
+$ npm start 9222:myserenade.int:8555
 ```
 
 ## Security
@@ -76,27 +76,27 @@ For security, ***don't expose your browser port (by default 9222) to the public 
 
 This server uses [helmet](https://github.com/helmetjs/helmet), HTTPS, and WSS (*secure WebSockets*).
 
-Once you start `srad` (either via the command line or from the library) you will receive a login URL. That URL can be used to log you on to the secure DevTools server. Without it you will not be able to access any DevTools endpoints. Pass it out to those frens you wish to collaborate with on the solvage, ever venerable, of the buggs.
+Once you start `serenade` (either via the command line or from the library) you will receive a login URL. That URL can be used to log you on to the secure DevTools server. Without it you will not be able to access any DevTools endpoints. Pass it out to those frens you wish to collaborate with on the solvage, ever venerable, of the buggs.
 
-**srad** uses cookie authentication to prevent unauthorized connections. The need for a secure remote connection utility for DevTools is [well known](https://bugs.chromium.org/p/chromium/issues/detail?id=813540)
+**serenade** uses cookie authentication to prevent unauthorized connections. The need for a secure remote connection utility for DevTools is [well known](https://bugs.chromium.org/p/chromium/issues/detail?id=813540)
 
 ## Certificates
 
-By default, srad looks for TLS certificates *(`cert.pem, chain.pem, fullchain.pem  and privkey.pem`)* in `path.resolve(os.homedir(), 'sslcerts')` *(`$HOME/sslcerts` on Windows)*. You can override that with the `certBasePath` option. 
+By default, serenade looks for TLS certificates *(`cert.pem, chain.pem, fullchain.pem  and privkey.pem`)* in `path.resolve(os.homedir(), 'sslcerts')` *(`$HOME/sslcerts` on Windows)*. You can override that with the `certBasePath` option. 
 
-`srad` will ***always*** throw an error and fail is certificates are not found.
+`serenade` will ***always*** throw an error and fail is certificates are not found.
 
 ## API 
 
-All the options you see below can be accessed via script using their camel-cased variants. Globally installed command line usage (`npm i -g srad@latest`) is shown for demonstrative purposes. The command line API is equivalent whether you use `npx` or `npm start` from the repository to run it.
+All the options you see below can be accessed via script using their camel-cased variants. Globally installed command line usage (`npm i -g serenade@latest`) is shown for demonstrative purposes. The command line API is equivalent whether you use `npx` or `npm start` from the repository to run it.
 
 ### Basic Use
 
 The command line has a very simple format:
 
-> srad <BROWSER_PORT>:<DOMAIN_NAME|IP_ADDRESS>:<SERVER_PORT> [certificatesPath]
+> serenade <BROWSER_PORT>:<DOMAIN_NAME|IP_ADDRESS>:<SERVER_PORT> [certificatesPath]
 
-Where `DOMAIN_NAME|IP_ADDRESS` is that of the server you run `srad` on.
+Where `DOMAIN_NAME|IP_ADDRESS` is that of the server you run `serenade` on.
 
 And `certificatesPath` is an optional file system path to override the default location to look for [certificates](#Certificates).
 
@@ -106,10 +106,10 @@ The port that you have exposed the remote debugging protocol on, via the `--remo
 
 ```sh
 
-$ google-chrome-stable --headless --remote-debugging-port=51386 srad 51386:mysite.example.com:8080
+$ google-chrome-stable --headless --remote-debugging-port=51386 serenade 51386:mysite.example.com:8080
 
 {
-  sradUp: {
+  serenadeUp: {
     at: 2021-09-20T12:39:24.942Z,
     CHROME_PORT: 51386,
     SERVER_PORT: 8080,
@@ -119,20 +119,20 @@ $ google-chrome-stable --headless --remote-debugging-port=51386 srad 51386:mysit
 
 ```
 
-There's no default, you must always specify a browser port. If the browser is not running on that port, `srad` will thrown an error. 
+There's no default, you must always specify a browser port. If the browser is not running on that port, `serenade` will thrown an error. 
 
 ### Background
 
 Run it in the background, like so:
 
 ```sh
-$ srad 51386:doppelgange.pointbyne.org:8888 &
+$ serenade 51386:doppelgange.pointbyne.org:8888 &
 ```
 
 Or using pm2:
 
 ```sh
-$ pm2 start srad 9222:example.spacedemons.com:8433
+$ pm2 start serenade 9222:example.spacedemons.com:8433
 ```
 
 ## Server Port
@@ -142,7 +142,7 @@ There's no default port, so you must always specify a server port.
 ### Technical Details and Limitations
 
 By default the Chrome DevTools Frontend does not work cross-browser. It only works in Chrome. This is not a policy of the DevTools team, simply because they don't have the bandwidth to support this right now. 
-I [opened a PR to bring cross-browser support to DevTools](https://github.com/ChromeDevTools/devtools-frontend/pull/165), but until and unless we make it happen, I am having `srad` patch the DevTools frontend resources *in-flight* via the proxy, so it can work in any browser.
+I [opened a PR to bring cross-browser support to DevTools](https://github.com/ChromeDevTools/devtools-frontend/pull/165), but until and unless we make it happen, I am having `serenade` patch the DevTools frontend resources *in-flight* via the proxy, so it can work in any browser.
 
 Because of this ad-hoc, "off-branch" solution, and given the fact that each version of Chrome may ship with a slightly different version of the DevTools front-end, you may find it breaks at any time.
 

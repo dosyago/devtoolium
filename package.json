@@ -1,17 +1,19 @@
 {
-  "name": "srad",
+  "name": "serenade.devtools",
   "version": "1.1.0",
-  "description": "Secure Remote and Authenticate DevTools, connect to remote tabs and debug.",
+  "description": "Secure Remote and Authenticated DevTools, connect to remote tabs and debug.",
+  "type": "module",
   "main": "src/index.js",
   "bin": {
-    "srad": "src/index.js"
+    "serenade": "src/index.js"
   },
   "scripts": {
-    "test": "node src/index.js"
+    "test": "nodemon src/index.js",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/i5ik/secure-remote-devtools.git"
+    "url": "git+https://github.com/i5ik/serenade.git"
   },
   "keywords": [
     "devtools",
@@ -24,14 +26,17 @@
   "author": "@dosy",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/i5ik/secure-remote-devtools/issues"
+    "url": "https://github.com/i5ik/serenade/issues"
   },
-  "homepage": "https://github.com/i5ik/secure-remote-devtools#readme",
+  "homepage": "https://github.com/i5ik/serenade#readme",
   "dependencies": {
     "compression": "^1.7.4",
     "cookie-parser": "latest",
     "express": "^4.17.1",
     "sync-fetch": "^0.3.0",
     "ws": "^7.5.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   }
 }
