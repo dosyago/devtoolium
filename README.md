@@ -1,8 +1,6 @@
-# Serenade - Secure Remote and Authenticated DevTools
+# Serenade - Secure Remote and Authenticated DevTools ![npm](https://img.shields.io/npm/dt/srad?label=v1%20downloads) ![npm](https://img.shields.io/npm/dt/serenade.devtools) ![npm](https://img.shields.io/npm/v/serenade.devtools?color=00eeff) [![visitors+++](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fi5ik%2Fserenade&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=%28today%2Ftotal%29%20visitors%2B%2B%2B%20since%20Sep%2127%202021&edge_flat=false)](https://hits.seeyoufarm.com) 
 
-**Collaborate on Bugs Using Chrome DevTools remotely over a Secure Proxy from Any Browser**
-
-*Alpha release*
+Add HTTPS, WSS and authentication to `--remote-debugging-port` to debug from anywhere and collaborate securely on bugs.
 
 ## What is this?
 
