@@ -118,7 +118,7 @@ By default, serenade looks for TLS certificates *(`cert.pem, chain.pem, fullchai
 
 ## API 
 
-All the options you see below can be accessed via script using their camel-cased variants. Globally installed command line usage (`npm i -g serenade@latest`) is shown for demonstrative purposes. The command line API is equivalent whether you use `npx` or `npm start` from the repository to run it.
+All the options you see below can be accessed via script using their camel-cased variants. Globally installed command line usage (`npm i -g serenade.devtools@latest`) is shown for demonstrative purposes. The command line API is equivalent whether you use `npx` or `npm start` from the repository to run it.
 
 ### Basic Use
 
