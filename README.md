@@ -56,11 +56,11 @@ I searched around a bit before doing so, and while I couldn't find any current p
 ## Get it
 
 ```sh
-$ npm i -g devtoolium.devtools
+$ npm i -g devtoolium
 ## or
-$ npx devtoolium.devtools
+$ npx devtoolium
 ## or
-$ npm i --save devtoolium.devtools
+$ npm i --save devtoolium
 ## or
 $ git clone https://github.com/i5ik/devtoolium.git
 $ cd devtoolium/ 
@@ -78,13 +78,13 @@ devtoolium 9222:mysite.com:8888
 Using npx:
 
 ```sh
-npx devtoolium.devtools 9222:me.example.com:8080
+npx devtoolium 9222:me.example.com:8080
 ```
 
 From a NodeJS script:
 
 ```javascript
-import devtoolium from 'devtoolium.devtools';
+import devtoolium from 'devtoolium';
 
 devtoolium({
   browserPort: 9222,
