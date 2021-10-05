@@ -2,7 +2,9 @@
 
 ## Simple and secure remote browser with DevTools, based on DevTools
 
-Remote debugging or the DevTools protocol for JavaScript is served insecured via `--remote-debugging-port` option on browsers and Node runtimes. This project adds a secure HTTPS and secure WebSockets server proxy to that endpoint, plus authentication, to let you share and expose these endpoints over the internet only to intended actors.
+This lets you share devtools pages over the internet using a secure proxy.
+
+Remote debugging or the DevTools protocol for JavaScript is normally served insecured via `--remote-debugging-port` option on browsers and Node runtimes. This project adds a secure HTTPS and secure WebSockets server proxy to that endpoint, plus authentication, to let you share and expose these endpoints over the internet only to intended actors.
 
 This is a self-hosted free open-source product, that you can get on npm, and use it to run a secure proxy server to make browser DevTools securely accessible remotely.
 
