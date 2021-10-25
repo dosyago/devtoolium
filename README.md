@@ -1,8 +1,10 @@
 # [:gem: Devtoolium](https://github.com/i5ik/devtoolium) ![npm](https://img.shields.io/npm/dt/srad?label=v1%20downloads) ![npm](https://img.shields.io/npm/dt/devtoolium) ![npm](https://img.shields.io/npm/v/devtoolium?color=00eeff) [![visitors+++](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fi5ik%2Fdevtoolium&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=%28today%2Ftotal%29%20visitors%2B%2B%2B%20since%20Sep%2127%202021&edge_flat=false)](https://hits.seeyoufarm.com) 
 
-## Simple and secure remote browser with DevTools, based on DevTools
+# expose the browser devtools port on the public internet by using https and authentication
 
 This lets you share devtools pages over the internet using a secure proxy.
+
+iit also works mostly cross browser.
 
 Remote debugging or the DevTools protocol for JavaScript is normally served insecured via `--remote-debugging-port` option on browsers and Node runtimes. This project adds a secure HTTPS and secure WebSockets server proxy to that endpoint, plus authentication, to let you share and expose these endpoints over the internet only to intended actors.
 
