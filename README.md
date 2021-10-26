@@ -2,9 +2,9 @@
 
 # expose the browser devtools port on the public internet by using https and authentication
 
-This lets you share devtools pages over the internet using a secure proxy.
+This lets you share devtools pages over the internet using a secure proxy running on a domain you own.
 
-iit also works mostly cross browser.
+It also works mostly cross browser.
 
 Remote debugging or the DevTools protocol for JavaScript is normally served insecured via `--remote-debugging-port` option on browsers and Node runtimes. This project adds a secure HTTPS and secure WebSockets server proxy to that endpoint, plus authentication, to let you share and expose these endpoints over the internet only to intended actors.
 
@@ -15,6 +15,8 @@ It adds HTTPS, WSS and authentication to `--remote-debugging-port` to **automate
 This means you can serve the DevTools inspector frontend from a secure HTTPS server with authentication, as well as connect to all the normal devtools API endpoints and target websockets, but they're now encrypted and authenticated.
 
 **Get started:**
+
+Make sre you have certificates for your website (in the example below, *mysite.com*) in your $HOME/sslcerts folder. 
 
 ```sh
 $ browser --remote-debugging-port=9222
