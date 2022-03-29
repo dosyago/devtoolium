@@ -14,7 +14,7 @@ import compression from 'compression';
 import syncfetch from 'sync-fetch';
 
 const DEBUG = {
-  val: 0
+  val: 1
 };
 console.log('\n');
 
