@@ -88,7 +88,10 @@ export default async function start({browserPort, serverPort, certificatesPath, 
   Object.assign(SSL_OPTS, {
     cert: fs.readFileSync(path.resolve(certificatesPath, `fullchain.pem`)),
     key: fs.readFileSync(path.resolve(certificatesPath, `privkey.pem`)),
-    ca: fs.readFileSync(path.resolve(certificatesPath, `chain.pem`)),
+    ca: fs.existsSync(path.resolve(certificatesPath, 'chain.pem')) ? 
+      fs.readFileSync(path.resolve(certificatesPath, `chain.pem`)) 
+      :
+      undefined
   });
   DEBUG.val && console.log({
     version, COOKIENAME, CHROME_PORT, 
@@ -165,7 +168,7 @@ export default async function start({browserPort, serverPort, certificatesPath, 
 
     if (authorized) {
       const resource = {
-        hostname: 'localhost',
+        hostname: '127.0.0.1',
         port: CHROME_PORT,
         path: req.url,
         method: req.method,
@@ -299,7 +302,7 @@ export default async function start({browserPort, serverPort, certificatesPath, 
     if ( authorized ) {
       // the internal websocket to the browser (not public, remember never expose CHROME_PORT to
       // the internets! Or bad things happen!!! 0_0
-      const url = `ws://localhost:${CHROME_PORT}${req.url}`;
+      const url = `ws://127.0.0.1:${CHROME_PORT}${req.url}`;
       try {
         const crdpSocket = new WebSocket(url);
         SOCKETS.set(ws, crdpSocket);
