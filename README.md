@@ -146,7 +146,8 @@ The port that you have exposed the remote debugging protocol on, via the `--remo
 
 ```sh
 
-$ google-chrome-stable --headless --remote-debugging-port=51386 devtoolium 51386:mysite.example.com:8080
+$ google-chrome-stable --headless --remote-debugging-port=51386
+$ devtoolium 51386:mysite.example.com:8080
 
 {
   devtooliumUp: {
